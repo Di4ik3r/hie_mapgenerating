@@ -3,29 +3,37 @@ extends Spatial
 
 const cube_size: float = 1.0
 
+export(Resource) var map_vars: Resource
+
 export(int, 1, 100) var a_side: int = 100 setget _set_a
 export(int, 1, 100) var b_side: int = 70 setget _set_b
-export(float, 0, 100, 0.01) var block_height_multiplier: float = 4 setget _set_block_height_multiplier
+export(float, 0, 100, 0.01) var block_height_multiplier: float = 3 setget _set_block_height_multiplier
 export(int) var noise_seed: int = 0 setget _set_noise_seed
-export(int, 0, 40, 1) var noise_multiplier = 6 setget _set_noise_multiplier
+export(int, 0, 40, 1) var noise_multiplier: int = 6 setget _set_noise_multiplier
 export(float, 0, 1, 0.01) var noise_persistance = 0.25 setget _set_noise_persistance
 export(int, 0, 30, 1) var noise_octaves = 2 setget _set_noise_octaves
 export(float, 0, 10, 0.1) var noise_lactunarity = 2 setget _set_noise_lactunarity
-export(float, -1, 5, 0.001) var height_addition = 2.8 setget _set_height_addition
+export(float, -1, 5, 0.001) var height_addition: float = 2.8 setget _set_height_addition
 export(float, -1, 1, 0.001) var sand_comparison = 0.2 setget _set_sand_comparison
 export(float, 0, 8, 0.001) var forest_comparison = 4 setget _set_forest_comparison
 export(float, 0, 1, 0.01) var forest_percent = 0.3 setget _set_forest_percent
 export(int, 1, 40, 1) var forest_period = 7 setget _set_forest_period
 
-export(Color) var color_grass_interpolate: Color = Color(0, 0.7, 0) setget _set_color_grass_interpolate
-export(Color) var color_grass: Color = Color(0.1, 0.8, 0) setget _set_color_grass
+export(float, 0, 2, 0.001) var mountain_comparison = 2 setget _set_mountain_comparison
+
+#export(Color) var color_grass_interpolate: Color = Color(0, 0.7, 0) setget _set_color_grass_interpolate
+export(Color) var color_grass_interpolate: Color = Color(0.2, 0.6, 0) setget _set_color_grass_interpolate
+#export(Color) var color_grass: Color = Color(0.1, 0.8, 0) setget _set_color_grass
+export(Color) var color_grass: Color = Color(0.5, 0.8, 0) setget _set_color_grass
 export(Color) var color_sand_interpolate: Color = Color.black setget _set_color_sand_interpolate
 export(Color) var color_sand: Color = Color(0.6, 0.4, 0) setget _set_color_sand
 export(Color) var color_water_interpolate := Color(0, 0.5, 1) setget _set_color_water_interpolate
 export(Color) var color_water := Color.blue setget _set_color_water
+export(Color) var color_mountain_interpolate := Color.white setget _set_color_mountain_interpolate
+export(Color) var color_mountain := Color(0.69, 0.69, 0.69) setget _set_color_mountain
 
-export(float, -2, 0, 0.001) var water_height := -0.2 setget _set_water_height
-export(float, -1, 1, 0.001) var water_comparison = -0.4 setget _set_water_comparison
+export(float, -2, 0, 0.001) var water_height: float = -0.2 setget _set_water_height
+export(float, -1, 1, 0.001) var water_comparison: float = -0.4 setget _set_water_comparison
 
 var forest_blocks: = Array()
 
@@ -38,13 +46,13 @@ onready var SceneCamera := $Camera as Camera
 onready var SceneLight := $DirectionalLight as DirectionalLight
 
 
-func _init():
+func _init() -> void:
 	_terrain_noise_configuration()
 	_trees_noise_configuration()
 	if Engine.editor_hint:
-		Terrain = get_child(0)
+		Terrain = get_child(0) as MultiMeshInstance
 		if Terrain:
-			Trees = Terrain.get_child(0)
+			Trees = Terrain.get_child(0) as MultiMeshInstance
 
 func _ready() -> void:
 	_init()
@@ -56,12 +64,12 @@ func _ready() -> void:
 
 func generate() -> void:
 	forest_blocks = Array()
-	var min_height = 999
-	var max_height = -999
+	var min_height: float = 999.0
+	var max_height: float = -999.0
 	for a in range(0, a_side):
 		for b in range(0, b_side):
-			var noise = _noise.get_noise_2d(a, b) * noise_multiplier
-			var height = block_height_multiplier * _noise.get_noise_2d(a, b)
+			var noise: float = _noise.get_noise_2d(a, b) * noise_multiplier
+			var height: float = block_height_multiplier * _noise.get_noise_2d(a, b)
 			
 			if height > max_height:
 				max_height = height
@@ -75,79 +83,31 @@ func generate() -> void:
 	else:
 		full_height = max_height
 		
-	var avarage_height = full_height / ((a_side * b_side) as float)
 	
 	var instance: int = 0
 	for a in range(0, a_side):
 		for b in range(0, b_side):
-			var noise = _noise.get_noise_2d(a, b) * noise_multiplier
-			var height_compare = noise + height_addition
+			var noise: float = _noise.get_noise_2d(a, b) * noise_multiplier
+			var height_compare: float = noise + height_addition
 			var height = block_height_multiplier * _noise.get_noise_2d(a, b)
 			
 			if height_compare < water_comparison:
-				var color = Color(color_water.to_html())
-				color = color.linear_interpolate(color_water_interpolate,
-					Tools.noise_float_lerp(noise) * noise + 1)
-				Terrain.multimesh.set_instance_color(instance, color)
-				height = water_height - block_height_multiplier / 1.89
-				if height == min_height:
-					Terrain.multimesh.set_instance_color(instance, Color.red)
-#					print("min height = %f" % min_height)
-#					print("height = %f" % height)
-#					print("basis = %f" % (abs(min_height) + height + 1))
-#					print("height + min_height + size / 2 = %f" % (height + abs(min_height) + cube_size / 2))
+				height = _generate_water(noise, instance)
 			elif height_compare < sand_comparison:
-				var color = Color(color_sand.to_html())
-				color = color.linear_interpolate(color_sand_interpolate,
-					Tools.noise_float_lerp(noise) + 0.2)
-				Terrain.multimesh.set_instance_color(instance, color)
+				_generate_sand(noise, instance)
+			elif height_compare > 7 - mountain_comparison:
+				height = _generate_mountain(min_height, height, noise, instance)
+				
 			elif height_compare > 8 - forest_comparison:
-				var color: Color = Color(color_grass.to_html())
-				color = color.linear_interpolate(color_grass_interpolate,
-					Tools.noise_float_lerp(noise))
-				Terrain.multimesh.set_instance_color(instance, color)
-				
-#				Terrain.multimesh.set_instance_color(instance, Color.lime)
-				
-				forest_blocks.append(Vector3(a, min_height + height + 1.5, b))
-#				if rand() < forest_percent:
-#					Trees
+				forest_blocks.append(_generate_tree(a, b, min_height, height, noise, instance))
 			else:
-				var color: Color = Color(color_grass.to_html())
-				color = color.linear_interpolate(color_grass_interpolate,
-					Tools.noise_float_lerp(noise) )
-				Terrain.multimesh.set_instance_color(instance, color)
+				_generate_grass(noise, instance)
 			
-#			var calc = height - min_height
-##			var pos = Vector3(a, min_height + height, b)
-#			var pos = Vector3(a, (calc), b)
-#			var basis = Basis()
-#			basis = basis.scaled(Vector3(1,
-#				(calc),
-#				1))
-#			var pos = Vector3(a, (0 - (cube_size / 2) + (height + min_height)), b)
-			var pos = Vector3(a, (height + abs(min_height) + cube_size / 2), b)
-			var basis = Basis()
-#			basis = basis.scaled(Vector3(1, height + min_height + max_height, 1))
-			var calc: float
-			if block_height_multiplier == 0:
-				calc = 1
-			else:
-				calc = (abs(min_height) + height) * block_height_multiplier / (block_height_multiplier / 2) + 1
-			basis = basis.scaled(Vector3(1,
-				calc,
-				1))
-			var transform = Transform(basis, pos)
-#			transform.scaled(Vector3(1, (cube_size - cube_size / 2) + height, 1))
-			Terrain.multimesh.set_instance_transform(instance, transform)
-#			Terrain.multimesh.set_instance_transform(instance, 
-##				Transform(Basis(), pos))
-#				Transform(basis, pos))
+			_place_block(a, b, min_height, height, noise, instance)
 			
-#			Terrain.multimesh.set_instance_color(instance, Color(noise, noise, noise))
 			instance += 1
 	
-	var count = forest_blocks.size()
+	var count: int = forest_blocks.size()
 	var forest_percent_count = ((count as float * forest_percent)) as int
 	var array = Array()
 	for i in range(count):
@@ -165,6 +125,72 @@ func generate() -> void:
 			Transform(Basis(), vector))
 
 
+# ########################################################################################### BLOCK GEN
+func _generate_water(noise: float, instance: int) -> float:
+	var color: Color
+	color = Color(color_water.to_html())
+	color = color.linear_interpolate(color_water_interpolate,
+		Tools.noise_float_lerp(noise) * noise + 1)
+	Terrain.multimesh.set_instance_color(instance, color)
+	var height = water_height - block_height_multiplier / 1.89
+	return height
+
+func _generate_sand(noise: float, instance: int) -> void:
+	var color: Color
+	color = Color(color_sand.to_html())
+	color = color.linear_interpolate(color_sand_interpolate,
+		Tools.noise_float_lerp(noise) + 0.2)
+	Terrain.multimesh.set_instance_color(instance, color)
+
+func _generate_mountain(min_height: float, height: float, noise:float, instance: int) -> float:
+	var color: Color
+	height *= noise * mountain_comparison / 1.5
+	height -= block_height_multiplier / 2
+	color = Color(color_mountain.to_html())
+	color = color.linear_interpolate(color_mountain_interpolate,
+		Tools.noise_float_lerp(noise) * 5 - 10)
+	Terrain.multimesh.set_instance_color(instance, color)
+	
+	return height
+
+func _generate_tree(a: int, b: int, min_height: float, height: float, noise: float, instance: int) -> Vector3:
+	var color: Color
+	color = Color(color_grass.to_html())
+	color = color.linear_interpolate(color_grass_interpolate,
+		Tools.noise_float_lerp(noise))
+	Terrain.multimesh.set_instance_color(instance, color)
+	
+	var calc: float
+	if block_height_multiplier == 0:
+		calc = 1
+	else:
+		calc = (abs(min_height) + height) * block_height_multiplier / (block_height_multiplier / 2) + 1
+	var x_offset = rand_range(-0.3, 0.3)
+	var z_offset = rand_range(-0.3, 0.3)
+	var pos = Vector3(a, calc + 1, b)
+#	var pos = Vector3(a + x_offset, calc + 1, b + z_offset)
+	
+	return pos
+
+func _generate_grass(noise, instance) -> void:
+	var color: Color
+	color = Color(color_grass.to_html())
+	color = color.linear_interpolate(color_grass_interpolate,
+		Tools.noise_float_lerp(noise) )
+	Terrain.multimesh.set_instance_color(instance, color)
+
+func _place_block(a: int, b: int, min_height:float, height: float,  noise: float, instance: int) -> void:
+	var pos = Vector3(a, (height + abs(min_height) + cube_size / 2), b)
+	var basis = Basis()
+	var calc: float
+	if block_height_multiplier == 0:
+		calc = 1
+	else:
+		calc = (abs(min_height) + height) * block_height_multiplier / (block_height_multiplier / 2) + 1
+	basis = basis.scaled(Vector3(1, calc, 1))
+	var transform = Transform(basis, pos)
+	Terrain.multimesh.set_instance_transform(instance, transform)
+
 func _update_Terrain() -> void:
 	if not Terrain:
 		if get_child_count() > 0:
@@ -176,6 +202,8 @@ func _update_Terrain() -> void:
 	Terrain.multimesh.instance_count = a_side * b_side
 	generate()
 
+
+# ########################################################################################### SETTERS
 func _set_a(value: int) -> void:
 	a_side = value
 	_update_Terrain()
@@ -270,6 +298,18 @@ func _terrain_noise_configuration() -> void:
 
 func _set_block_height_multiplier(value: float) -> void:
 	block_height_multiplier = value
+	_update_Terrain()
+
+func _set_mountain_comparison(value: float) -> void:
+	mountain_comparison = value
+	_update_Terrain()
+
+func _set_color_mountain(value: Color) -> void:
+	color_mountain = value
+	_update_Terrain()
+	
+func _set_color_mountain_interpolate(value: Color) -> void:
+	color_mountain_interpolate = value
 	_update_Terrain()
 
 func _trees_noise_configuration() -> void:
