@@ -19,7 +19,8 @@ export(float, 0, 8, 0.001) var forest_comparison = 4 setget _set_forest_comparis
 export(float, 0, 1, 0.01) var forest_percent = 0.3 setget _set_forest_percent
 export(int, 1, 40, 1) var forest_period = 7 setget _set_forest_period
 
-export(float, 0, 2, 0.001) var mountain_comparison = 2 setget _set_mountain_comparison
+export(float, 0, 2, 0.001) var mountain_comparison: float = 2 setget _set_mountain_comparison
+export(bool) var generate_mountain: bool = true setget _set_generate_mountain
 
 #export(Color) var color_grass_interpolate: Color = Color(0, 0.7, 0) setget _set_color_grass_interpolate
 export(Color) var color_grass_interpolate: Color = Color(0.2, 0.6, 0) setget _set_color_grass_interpolate
@@ -95,7 +96,7 @@ func generate() -> void:
 				height = _generate_water(noise, instance)
 			elif height_compare < sand_comparison:
 				_generate_sand(noise, instance)
-			elif height_compare > 7 - mountain_comparison:
+			elif height_compare > 7 - mountain_comparison && generate_mountain:
 				height = _generate_mountain(min_height, height, noise, instance)
 				
 			elif height_compare > 8 - forest_comparison:
@@ -310,6 +311,10 @@ func _set_color_mountain(value: Color) -> void:
 	
 func _set_color_mountain_interpolate(value: Color) -> void:
 	color_mountain_interpolate = value
+	_update_Terrain()
+
+func _set_generate_mountain(value: bool) -> void:
+	generate_mountain = value
 	_update_Terrain()
 
 func _trees_noise_configuration() -> void:
