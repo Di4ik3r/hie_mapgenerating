@@ -8,15 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "MapGenerator",
+"language": "GDScript",
+"path": "res://scripts/map/MapGenerator.gd"
+} ]
 _global_script_class_icons={
-
+"MapGenerator": ""
 }
 
 [application]
 
 config/name="MapGeneration"
-run/main_scene="res://scenes/map/Map.tscn"
+run/main_scene="res://scenes/map/MapGenerating.tscn"
 config/icon="res://icon.png"
 
 [autoload]

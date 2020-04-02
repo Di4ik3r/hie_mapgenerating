@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/map/ui/MapGenPanelGroupTech.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/map/ui/MapGenPanelGroupEnv.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/map/ui/MapGenUI.gd" type="Script" id=3]
+
+[node name="MapGeneratingUI" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 10
+custom_constants/margin_left = 5
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 5.0
+margin_top = 10.0
+margin_right = 795.0
+margin_bottom = 272.0
+size_flags_vertical = 0
+
+[node name="MapGenPanelGroupTech" parent="HBoxContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 151.0
+margin_bottom = 252.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Expander" type="Control" parent="HBoxContainer"]
+margin_left = 155.0
+margin_right = 305.0
+margin_bottom = 262.0
+size_flags_horizontal = 3
+
+[node name="Expander2" type="Control" parent="HBoxContainer"]
+margin_left = 309.0
+margin_right = 459.0
+margin_bottom = 262.0
+size_flags_horizontal = 3
+
+[node name="Expander3" type="Control" parent="HBoxContainer"]
+margin_left = 463.0
+margin_right = 613.0
+margin_bottom = 262.0
+size_flags_horizontal = 3
+
+[node name="MapGenPanelGroupEnv" parent="HBoxContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 617.0
+margin_right = 789.0
+margin_bottom = 262.0
+size_flags_horizontal = 3
+[connection signal="length_changed" from="HBoxContainer/MapGenPanelGroupTech" to="." method="_on_length_changed"]
+[connection signal="seed_changed" from="HBoxContainer/MapGenPanelGroupTech" to="." method="_on_seed_changed"]
+[connection signal="width_changed" from="HBoxContainer/MapGenPanelGroupTech" to="." method="_on_width_changed"]
+[connection signal="forest_comparison_chanded" from="HBoxContainer/MapGenPanelGroupEnv" to="." method="_on_forest_comparison_chanded"]
+[connection signal="forest_percent_chanded" from="HBoxContainer/MapGenPanelGroupEnv" to="." method="_on_forest_percent_chanded"]
+[connection signal="forest_period_chanded" from="HBoxContainer/MapGenPanelGroupEnv" to="." method="_on_forest_period_chanded"]

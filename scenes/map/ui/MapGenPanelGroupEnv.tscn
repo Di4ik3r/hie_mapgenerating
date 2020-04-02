@@ -1,0 +1,139 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/map/ui/MapParameterUI.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/map/ui/MapGenPanelGroup.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/map/ui/MapGenPanelGroupEnv.gd" type="Script" id=3]
+
+[node name="MapGenPanelGroup" instance=ExtResource( 2 )]
+script = ExtResource( 3 )
+
+[node name="MarginContainer" parent="." index="1"]
+custom_constants/margin_bottom = 10
+
+[node name="VBoxContainer" parent="MarginContainer" index="0"]
+margin_bottom = 490.0
+
+[node name="Title" parent="MarginContainer/VBoxContainer/MarginContainer/CenterContainer" index="0"]
+margin_left = 314.0
+margin_right = 456.0
+text = "Environment variables"
+
+[node name="ForestComparisonUI" parent="MarginContainer/VBoxContainer" index="1" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 43.0
+margin_right = 770.0
+margin_bottom = 110.0
+
+[node name="MarginContainer" parent="MarginContainer/VBoxContainer/ForestComparisonUI" index="0"]
+margin_right = 770.0
+margin_bottom = 67.0
+
+[node name="VBoxContainer" parent="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer" index="0"]
+margin_right = 770.0
+margin_bottom = 62.0
+
+[node name="CenterContainer" parent="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer/VBoxContainer" index="0"]
+margin_right = 770.0
+
+[node name="ParameterName" parent="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer/VBoxContainer/CenterContainer" index="0"]
+margin_left = 325.0
+margin_right = 445.0
+text = "Forest Comparison"
+
+[node name="CenterContainer2" parent="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer/VBoxContainer" index="1"]
+margin_right = 770.0
+
+[node name="ParameterValue" parent="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer/VBoxContainer/CenterContainer2" index="0"]
+margin_left = 381.0
+margin_right = 389.0
+text = "4"
+
+[node name="HSlider" parent="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer/VBoxContainer" index="2"]
+margin_right = 770.0
+max_value = 8.0
+step = 0.001
+value = 4.0
+
+[node name="ForestPercentUI" parent="MarginContainer/VBoxContainer" index="2" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 114.0
+margin_right = 770.0
+margin_bottom = 181.0
+
+[node name="MarginContainer" parent="MarginContainer/VBoxContainer/ForestPercentUI" index="0"]
+margin_right = 770.0
+margin_bottom = 67.0
+
+[node name="VBoxContainer" parent="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer" index="0"]
+margin_right = 770.0
+margin_bottom = 62.0
+
+[node name="CenterContainer" parent="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer/VBoxContainer" index="0"]
+margin_right = 770.0
+
+[node name="ParameterName" parent="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer/VBoxContainer/CenterContainer" index="0"]
+margin_left = 338.0
+margin_right = 431.0
+text = "Forest Percent"
+
+[node name="CenterContainer2" parent="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer/VBoxContainer" index="1"]
+margin_right = 770.0
+
+[node name="ParameterValue" parent="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer/VBoxContainer/CenterContainer2" index="0"]
+margin_left = 375.0
+margin_right = 395.0
+text = "0.3"
+
+[node name="HSlider" parent="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer/VBoxContainer" index="2"]
+margin_right = 770.0
+max_value = 1.0
+step = 0.01
+value = 0.3
+
+[node name="ForestPeriodUI" parent="MarginContainer/VBoxContainer" index="3" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 185.0
+margin_right = 770.0
+margin_bottom = 252.0
+
+[node name="MarginContainer" parent="MarginContainer/VBoxContainer/ForestPeriodUI" index="0"]
+margin_right = 770.0
+margin_bottom = 67.0
+
+[node name="VBoxContainer" parent="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer" index="0"]
+margin_right = 770.0
+margin_bottom = 62.0
+
+[node name="CenterContainer" parent="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer/VBoxContainer" index="0"]
+margin_right = 770.0
+
+[node name="ParameterName" parent="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer/VBoxContainer/CenterContainer" index="0"]
+margin_left = 342.0
+margin_right = 427.0
+text = "Forest Period"
+
+[node name="CenterContainer2" parent="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer/VBoxContainer" index="1"]
+margin_right = 770.0
+
+[node name="ParameterValue" parent="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer/VBoxContainer/CenterContainer2" index="0"]
+margin_left = 381.0
+margin_right = 389.0
+text = "7"
+
+[node name="HSlider" parent="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer/VBoxContainer" index="2"]
+margin_right = 770.0
+min_value = 1.0
+max_value = 12.0
+value = 7.0
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/ForestComparisonUI/MarginContainer/VBoxContainer/HSlider" to="." method="_on_forest_comparison_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/ForestPercentUI/MarginContainer/VBoxContainer/HSlider" to="." method="_on_forest_percent_value_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/ForestPeriodUI/MarginContainer/VBoxContainer/HSlider" to="." method="_on_forest_period_value_changed"]
+
+[editable path="MarginContainer/VBoxContainer/ForestComparisonUI"]
+
+[editable path="MarginContainer/VBoxContainer/ForestPercentUI"]
+
+[editable path="MarginContainer/VBoxContainer/ForestPeriodUI"]
