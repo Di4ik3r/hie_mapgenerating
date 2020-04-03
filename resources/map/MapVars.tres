@@ -3,26 +3,26 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Resource
 
-const CUBE_SIZE = 1
+var CUBE_SIZE = 1
 
-const HEIGHT_ADDITION: float = 2.8
-const BLOCK_HEIGHT_MULTIPLIER: float = 3.0
-const NOISE_MULTIPLIER: float = 6.0
+var HEIGHT_ADDITION: float = 2.8
+var BLOCK_HEIGHT_MULTIPLIER: float = 3.0
+var NOISE_MULTIPLIER: float = 6.0
 
-const SAND_COMPARISON: float = 0.2
-const MOUNTAIN_COMPARISON: float = 2.0
+var SAND_COMPARISON: float = 0.2
+var MOUNTAIN_COMPARISON: float = 2.0
 
-const COLOR_GRASS_INTERPOLATION: Color = Color(0.2, 0.6, 0)
-const COLOR_GRASS: Color = Color(0.5, 0.8, 0)
-const COLOR_SAND_INTERPOLATE: Color = Color.black
-const COLOR_SAND: Color = Color(0.6, 0.4, 0)
-const COLOR_WATER_INTERPOLATION: Color = Color(0, 0.5, 1)
-const COLOR_WATER: Color = Color.blue
-const COLOR_MOUNTAIN_INTERPOLATION: Color = Color.white
-const COLOR_MOUNTAIN: Color = Color(0.69, 0.69, 0.69)
+var COLOR_GRASS_INTERPOLATION: Color = Color(0.2, 0.6, 0)
+var COLOR_GRASS: Color = Color(0.5, 0.8, 0)
+var COLOR_SAND_INTERPOLATE: Color = Color.black
+var COLOR_SAND: Color = Color(0.6, 0.4, 0)
+var COLOR_WATER_INTERPOLATION: Color = Color(0, 0.5, 1)
+var COLOR_WATER: Color = Color.blue
+var COLOR_MOUNTAIN_INTERPOLATION: Color = Color.white
+var COLOR_MOUNTAIN: Color = Color(0.69, 0.69, 0.69)
 
-const WATER_HEIGHT: float = -0.2
-const WATER_COMPARISON: float = -0.4
+var WATER_HEIGHT: float = -0.2
+var WATER_COMPARISON: float = -0.4
 
 export(int, 1, 100) var a_side: int = 50 setget _set_a
 export(int, 1, 100) var b_side: int = 20 setget _set_b
@@ -34,6 +34,10 @@ export(bool) var generate_mountain: bool = true setget _set_generate_mountain
 
 var noise: = OpenSimplexNoise.new() as OpenSimplexNoise
 var noise_tree: = OpenSimplexNoise.new() as OpenSimplexNoise
+
+func _init() -> void:
+	_trees_noise_configuration()
+	_terrain_noise_configuration()
 
 func _set_a(value: int) -> void:
 	a_side = value
@@ -75,8 +79,8 @@ func _terrain_noise_configuration() -> void:
 
 [resource]
 script = SubResource( 1 )
-a_side = 50
-b_side = 20
+a_side = 100
+b_side = 100
 noise_seed = 0
 forest_comparison = 4.0
 forest_percent = 0.3

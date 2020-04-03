@@ -45,13 +45,13 @@ text = "Length"
 margin_right = 770.0
 
 [node name="ParameterValue" parent="MarginContainer/VBoxContainer/ASideParamUI/MarginContainer/VBoxContainer/CenterContainer2" index="0"]
-margin_left = 377.0
-margin_right = 393.0
-text = "50"
+margin_left = 373.0
+margin_right = 397.0
+text = "100"
 
 [node name="HSlider" parent="MarginContainer/VBoxContainer/ASideParamUI/MarginContainer/VBoxContainer" index="2"]
 margin_right = 770.0
-value = 50.0
+value = 100.0
 
 [node name="BSideParamUI" parent="MarginContainer/VBoxContainer" index="2" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -80,13 +80,13 @@ text = "Width"
 margin_right = 770.0
 
 [node name="ParameterValue" parent="MarginContainer/VBoxContainer/BSideParamUI/MarginContainer/VBoxContainer/CenterContainer2" index="0"]
-margin_left = 377.0
-margin_right = 393.0
-text = "25"
+margin_left = 373.0
+margin_right = 397.0
+text = "100"
 
 [node name="HSlider" parent="MarginContainer/VBoxContainer/BSideParamUI/MarginContainer/VBoxContainer" index="2"]
 margin_right = 770.0
-value = 25.0
+value = 100.0
 
 [node name="NoiseParmUI" parent="MarginContainer/VBoxContainer" index="3" instance=ExtResource( 1 )]
 anchor_right = 0.0

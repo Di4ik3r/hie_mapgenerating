@@ -17,18 +17,17 @@ __meta__ = {
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 5.0
-margin_top = 10.0
+margin_top = 238.0
 margin_right = 795.0
-margin_bottom = 272.0
-size_flags_vertical = 0
+margin_bottom = 500.0
+size_flags_vertical = 8
 
 [node name="MapGenPanelGroupTech" parent="HBoxContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 151.0
-margin_bottom = 252.0
+margin_bottom = 262.0
 size_flags_horizontal = 3
-size_flags_vertical = 0
 
 [node name="Expander" type="Control" parent="HBoxContainer"]
 margin_left = 155.0
