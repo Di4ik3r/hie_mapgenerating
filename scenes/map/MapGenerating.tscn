@@ -40,11 +40,20 @@ transform = Transform( -0.573577, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.573577,
 far = 500.0
 target = NodePath("../CameraFollowPos")
 enabled = true
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CameraFollowPos" type="Position3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32.5845, 6.84726, 34.1116 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CenterPos" type="Position3D" parent="."]
+__meta__ = {
+"_edit_lock_": true
+}
 [connection signal="forest_comparison_changed" from="MapGeneratingUI" to="." method="_on_MapGeneratingUI_forest_comparison_changed"]
 [connection signal="forest_percent_changed" from="MapGeneratingUI" to="." method="_on_MapGeneratingUI_forest_percent_changed"]
 [connection signal="forest_perioad_changed" from="MapGeneratingUI" to="." method="_on_MapGeneratingUI_forest_perioad_changed"]
